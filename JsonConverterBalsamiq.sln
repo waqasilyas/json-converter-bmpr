@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalsamiqJsonConverter", "BalsamiqJsonConverter\BalsamiqJsonConverter.csproj", "{C5BFCD90-7EB5-4DC3-B5F4-87C1378D4966}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonConverterBalsamiq", "JsonConverterBalsamiq\JsonConverterBalsamiq.csproj", "{C5BFCD90-7EB5-4DC3-B5F4-87C1378D4966}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalsamiqArchiveModel", "BalsamiqArchiveModel\BalsamiqArchiveModel.csproj", "{1F69C6DD-4A92-48F4-8D04-C7A0910FB346}"
 EndProject
