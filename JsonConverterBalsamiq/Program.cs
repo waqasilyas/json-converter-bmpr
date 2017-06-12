@@ -1,14 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using BalsamiqArchiveModel.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-
-using BalsamiqArchiveModel.Model;
 
 namespace JsonConverterBalsamiq
 {
@@ -20,8 +14,9 @@ namespace JsonConverterBalsamiq
 
         static void Main(string[] args)
         {
-            string source = null;
-            string target = null;
+            String source = null;
+            String target = null;
+            bool forceOverwrite = false;
 
             try
             {
@@ -34,6 +29,10 @@ namespace JsonConverterBalsamiq
                         {
                             PrintHelp();
                             return;
+                        }
+                        else if (a.Equals("-f"))
+                        {
+                            forceOverwrite = true;
                         }
                         else
                         {
@@ -66,19 +65,42 @@ namespace JsonConverterBalsamiq
                     Environment.Exit(ErrorFileDoesntExists);
                 }
 
-
+                // Load project file
                 MockupProject project = BalsamiqArchiveReader.LoadProject(source);
 
+                // Create a writer
+                TextWriter writer;
+                if (target != null)
+                {
+                    if (File.Exists(target) && !forceOverwrite)
+                    {
+                        throw new Exception(String.Format("File already exists '{0}'. Use '-f' to overwrite.", target));
+                    }
+                    else
+                    {
+                        writer = new StreamWriter(target);
+                    }
+                }
+                else
+                {
+                    writer = Console.Out;
+                }
+                
+                
                 // Serialize to JSON
                 JsonSerializer serializer = new JsonSerializer();
-                Console.Out.WriteLine(JsonConvert.SerializeObject(project,
-                    Formatting.Indented,
-                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+                serializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+                serializer.Formatting = Formatting.Indented;
+                serializer.Serialize(writer, project);
+                writer.Close();
             }
             catch (Exception e)
             {
                 PrintError(e.Message);
+#if (DEBUG)
                 Console.Error.WriteLine("\nDebug trace:\n" + e.StackTrace);
+#endif
 #if (!DEBUG)
                 Environment.Exit(ErrorUnknown);
 #endif

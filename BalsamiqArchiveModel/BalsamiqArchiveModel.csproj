@@ -58,6 +58,7 @@
     <Compile Include="Model\MockupProject.cs" />
     <Compile Include="Model\MockupSymbol.cs" />
     <Compile Include="Model\ProjectInfo.cs" />
+    <Compile Include="Model\ResourceAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BalsamiqArchiveModel.Database;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BalsamiqArchiveModel.Model
@@ -59,7 +58,7 @@ namespace BalsamiqArchiveModel.Model
                 project.Info = InternalLoadProjectInfo(db);
 
                 // Load mockups
-                Mockup[] mockups = InternalLoadMockups(db);
+                InternalLoadResources(db, project);
             } 
 
             return project;
@@ -81,16 +80,16 @@ namespace BalsamiqArchiveModel.Model
             }
         }
 
-        public static Mockup[] LoadMockups(String sourceFile)
+        /*public static Mockup[] LoadResources(String sourceFile)
         {
             using (DatabaseAccess db = new DatabaseAccess(sourceFile))
             {
                 // Validate database schema
                 ValidDatabase(db, sourceFile);
 
-                return InternalLoadMockups(db);
+                return InternalLoadResources(db);
             }
-        }
+        }*/
 
         #region Private
 
@@ -116,29 +115,48 @@ namespace BalsamiqArchiveModel.Model
             return info;
         }
 
-        private static Mockup[] InternalLoadMockups(DatabaseAccess db)
+        private static void InternalLoadResources(DatabaseAccess db, MockupProject project)
         {
             List<Mockup> mockups = new List<Mockup>();
-
-            Console.WriteLine("======================== Mockups ======================");
 
             String[][] data = db.GetTableContent(BarTable.RESOURCES.ToString());
             foreach (String[] row in data)
             {
+                // Read resource attributes
                 ResourceAttributes attributes = new ResourceAttributes(row[2]);
-                
 
-                Console.WriteLine(JsonConvert.SerializeObject(attributes, Formatting.Indented));
-                Console.WriteLine("======================== Mockups ======================");
+                switch(attributes.Kind)
+                {
+                    case ResourceKind.Mockup:
+                        Mockup mockup = new Mockup();
+                        mockup.Id = row[0];
+                        mockup.BranchId = row[1];
+                        mockup.Attributes = attributes;
+                        mockup.Data = JObject.Parse(row[3]);
+
+                        project.Mockups.Add(mockup);
+                        break;
+
+                    case ResourceKind.SymbolLibrary:
+                        break;
+
+                    case ResourceKind.Asset:
+                        break;
+
+                    case ResourceKind.Unknown:
+                        throw new Exception(String.Format("Unkown resource kind: {0}", row[2]));
+                }
+
+                //Console.WriteLine("======================== mockup data ======================");
+                //Console.WriteLine(JsonConvert.SerializeObject(attributes, Formatting.Indented));
+                //Console.WriteLine(JsonConvert.SerializeObject(JObject.Parse(row[3]), Formatting.Indented));
             }
-
-            return mockups.ToArray();
         }
 
         private static void ValidDatabase(DatabaseAccess db, String sourceFile)
         {
             String[] tableList = db.GetTableList();
-            foreach (BarTable table in Enum.GetValues(typeof(BarTable)).Cast<BarTable>())
+            foreach (BarTable table in Enum.GetValues(typeof(BarTable)))
             {
                 // Verify the required tables exist
                 if (!tableList.Contains(table.ToString()))

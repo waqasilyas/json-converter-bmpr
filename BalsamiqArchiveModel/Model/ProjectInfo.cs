@@ -9,8 +9,6 @@ namespace BalsamiqArchiveModel.Model
         public static readonly Version SUPPORTED_SCHEMA = new Version("1.0");
 
         public const String ATTRIBUTES_PROP = "ArchiveAttributes";
-        public const String NAME_PROP = "name";
-        public const String DATE_PROP = "creationDate";
         public const String FORMAT_PROP = "ArchiveFormat";
         public const String REVISION_PROP = "ArchiveRevision";
         public const String REVISION_UUID_PROP = "ArchiveRevisionUUID";
@@ -67,31 +65,5 @@ namespace BalsamiqArchiveModel.Model
     public class ProjectInfoArchiveAttributes : BalsamiqArchiveAttributes
     {
         public ProjectInfoArchiveAttributes(String attributesJson) : base(attributesJson) { }
-
-        public String Name
-        {
-            get
-            {
-                return (String)Attributes[ProjectInfo.NAME_PROP];
-            }
-        }
-
-        public DateTime CreationDate
-        {
-            get
-            {
-                // The creation date is in attributes defined using JSON
-                if (Attributes != null)
-                {
-                    if (Attributes[ProjectInfo.DATE_PROP] != null)
-                    {
-                        // The date is in Unix epoch format
-                        return EPOCH.AddMilliseconds((long)Attributes[ProjectInfo.DATE_PROP]);
-                    }
-                }
-
-                return DateTime.MinValue;
-            }
-        }
     }
 }

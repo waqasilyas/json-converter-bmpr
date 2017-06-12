@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BalsamiqArchiveModel.Model
 {
@@ -10,18 +12,18 @@ namespace BalsamiqArchiveModel.Model
 
         public String Id { get; set; }
         public String BranchId { get; set; }
+        public String MeasuredH { get; set; }
+        public String MeasuredW { get; set; }
+        public String MockupH { get; set; }
+        public String MockupW { get; set; }
+        public String Version { get; set; }
         public ResourceAttributes Attributes { get; set; }
-        public MockupData Data { get; set; }
+        public List<MockupControl> Controls { get; } = new List<MockupControl>();
 
         #endregion
     }
 
-    public class ResourceAttributes : BalsamiqArchiveAttributes
-    {
-        public ResourceAttributes(String attributesJson) : base(attributesJson) { }
-    }
-
-    public class MockupData
+    public class MockupControl
     {
 
     }

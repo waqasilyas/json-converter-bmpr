@@ -14,9 +14,9 @@ namespace BalsamiqArchiveModel.Model
         #region Properties
 
         public ProjectInfo Info { get; set; }
-        public Mockup[] Mockups { get; set; }
-        public MockupSymbol[] Symbols { get; set; }
-        public MockupAsset[] Assets { get; set; }
+        public List<Mockup> Mockups { get; set; } = new List<Mockup>();
+        public List<MockupSymbol> Symbols { get; set; } = new List<MockupSymbol>();
+        public List<MockupAsset> Assets { get; set; } = new List<MockupAsset>();
 
         #endregion
     }
