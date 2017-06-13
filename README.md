@@ -20,12 +20,13 @@ In this regard the main objectives are:
   * Or can selectively parse fragments of the JSON to populate AbstractControl
 * Convert all TODO and wish list items to issues
 
-# Wish List
+## Wish List
 * Instead of emitting byte data for binary assets which is useless for readablity, start showing a hash instead so differences could be identified without bloat
 * Show multiple branches of a mockup under the same mockup, instead of a separate structure
 * Show names of symbols being used in a mockup, instead of ID
 * Show names of images being used in a mockup, instead of ID
 * Create an archive extractor, so that we can explore the mockups like a zip archive to diff tools instead of a monolithic JSON file.
+* Allow editing, like for merging changes from upstream, or resolving conflict? 
 
 # Legal
 
