@@ -85,8 +85,7 @@ namespace JsonConverterBalsamiq
                 {
                     writer = Console.Out;
                 }
-                
-                
+
                 // Serialize to JSON
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -108,6 +107,7 @@ namespace JsonConverterBalsamiq
             finally
             {
 #if (DEBUG)
+                Console.WriteLine("\nPress any key to exit...");
                 Console.In.Read();
 #endif
             }
@@ -123,11 +123,12 @@ namespace JsonConverterBalsamiq
         {
             PrintHeader();
             Console.WriteLine(@"Usage: 
-    JsonConverterBalsamiq.exe [-h] <source> [<target>]
+    JsonConverterBalsamiq.exe [-hf] SOURCE [TARGET]
 
-     -h          Prints this description.
-     <source>    A *.bmpr file to convert.
-     <target>    The destination file to save the JSON output. If not give, the JSON is emitted on standard output.");
+    SOURCE    A *.bmpr file to convert.
+    TARGET    The destination file to save the JSON output. If not give, the JSON is emitted on standard output.
+    -f        Force overwrite if TARGET exists
+    -h        Prints this description.");
         }
 
         static void PrintError(string error)

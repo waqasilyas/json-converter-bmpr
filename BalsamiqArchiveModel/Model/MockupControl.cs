@@ -1,12 +1,12 @@
 ﻿namespace BalsamiqArchiveModel.Model
 {
-    public class MockupSymbol : AbstractControl
+    public class MockupControl : AbstractControl
     {
         #region Properties
 
         /*
         [JsonProperty(Order = 20)]
-        public MockupControl[] Symbols
+        public MockupControl[] GroupChildren
         {
             get
             {

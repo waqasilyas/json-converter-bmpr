@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -58,5 +59,33 @@ namespace BalsamiqArchiveModel.Model
         }
 
         #endregion
+
+        /// <summary>
+        /// To identify known attributes so that we can evaluate unknown ones
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<String> GetKnownAttributes()
+        {
+            return new List<String>(new String[] { NAME_ATTRIB, DATE_ATTRIB });
+        }
+
+        /// <summary>
+        /// To identify and emit warnings about extra and unkown properties that were read
+        /// </summary>
+        /// <returns></returns>
+        public HashSet<String> GetUnknownAttributes()
+        {
+            List<String> known = GetKnownAttributes();
+            HashSet<String> uknown = new HashSet<String>();
+
+            Dictionary<String, Object> all = Attributes.ToObject<Dictionary<String, Object>>();
+            foreach (String key in all.Keys)
+            {
+                if (!known.Contains(key))
+                    uknown.Add(key);
+            }
+
+            return uknown;
+        }
     }
 }

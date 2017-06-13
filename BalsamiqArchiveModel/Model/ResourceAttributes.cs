@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net.Mime;
+using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -11,7 +11,7 @@ namespace BalsamiqArchiveModel.Model
         public const String IMPORTED_ATTRIB = "importedFrom";
         public const String KIND_ATTRIB = "kind";
         public const String MIME_ATTRIB = "mimeType";
-        public const String MODIFIED_ATTRIB = "modifyBy";
+        public const String MODIFIED_ATTRIB = "modifiedBy";
         public const String NOTES_ATTRIB = "notes";
         public const String ORDER_ATTRIB = "order";
         public const String PARENT_ATTRIB = "parentID";
@@ -117,6 +117,27 @@ namespace BalsamiqArchiveModel.Model
         }
 
         #endregion
+
+#if (DEBUG)
+        public override List<String> GetKnownAttributes()
+        {
+            List<String> known = base.GetKnownAttributes();
+            known.AddRange(new String[]
+            {
+                IMPORTED_ATTRIB,
+                KIND_ATTRIB,
+                MIME_ATTRIB,
+                MODIFIED_ATTRIB,
+                NOTES_ATTRIB,
+                ORDER_ATTRIB,
+                PARENT_ATTRIB,
+                THUMBNAIL_ATTRIB,
+                TRASHED_ATTRIB
+            });
+
+            return known;
+        }
+#endif
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

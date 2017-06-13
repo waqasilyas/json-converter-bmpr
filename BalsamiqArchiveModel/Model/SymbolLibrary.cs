@@ -2,9 +2,9 @@
 
 namespace BalsamiqArchiveModel.Model
 {
-    public class Mockup : AbstractControlContainer
+    public class SymbolLibrary : AbstractControlContainer
     {
         [JsonProperty(Order = 10)]
-        public MockupControl[] Controls { get; set; }
+        public MockupSymbol[] Symbols { get; set; }
     }
 }

@@ -51,12 +51,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DatabaseAccess.cs" />
+    <Compile Include="Model\AbstractControlContainer.cs" />
     <Compile Include="Model\BalsamiqArchiveAttributes.cs" />
     <Compile Include="Model\BalsamiqArchiveReader.cs" />
     <Compile Include="Model\Mockup.cs" />
     <Compile Include="Model\MockupAsset.cs" />
+    <Compile Include="Model\MockupControl.cs" />
+    <Compile Include="Model\ControlProperties.cs" />
     <Compile Include="Model\MockupProject.cs" />
     <Compile Include="Model\MockupSymbol.cs" />
+    <Compile Include="Model\SymbolLibrary.cs" />
+    <Compile Include="Model\AbstractControl.cs" />
     <Compile Include="Model\ProjectInfo.cs" />
     <Compile Include="Model\ResourceAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

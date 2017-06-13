@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using BalsamiqArchiveModel.Database;
 using Newtonsoft.Json.Linq;
 
@@ -9,6 +10,8 @@ namespace BalsamiqArchiveModel.Model
 {
     public class BalsamiqArchiveReader
     {
+        #region Enum
+
         /// <summary>
         /// Tables of a Balsamiq Archive (BAR) which is an SQL database
         /// </summary>
@@ -40,8 +43,21 @@ namespace BalsamiqArchiveModel.Model
             }
         }
 
+        #endregion
+
+        #region PublicStatic
+
+        public const String MOCKUP_PROP = "mockup";
+        public const String CONTROLS_PROP = "controls";
+        public const String CONTROL_PROP = "control";
+        public const String MEASUREDW_PROP = "measuredW";
+        public const String MEASUREDH_PROP = "measuredH";
+        public const String MOCKUPW_PROP = "mockupW";
+        public const String MOCKUPH_PROP = "mockupH";
+        public const String VERSION_PROP = "version";
+
         /// <summary>
-        /// Loads the mockup project into a model
+        /// Loads the mockup project into the model
         /// </summary>
         /// <param name="sourceFile">the Balsamiq Mockup archive file</param>
         /// <returns></returns>
@@ -91,7 +107,9 @@ namespace BalsamiqArchiveModel.Model
             }
         }*/
 
-        #region Private
+        #endregion
+
+        #region PrivateStatic
 
         private static ProjectInfo InternalLoadProjectInfo(DatabaseAccess db)
         {
@@ -101,7 +119,14 @@ namespace BalsamiqArchiveModel.Model
             foreach (String[] row in data)
             {
                 if (row[0].Equals(ProjectInfo.ATTRIBUTES_PROP))
-                    info.Properties.Add(row[0], new ProjectInfoArchiveAttributes(row[1]));
+                {
+                    ProjectInfoArchiveAttributes attributes = new ProjectInfoArchiveAttributes(row[1]);
+                    info.Properties.Add(row[0], attributes);
+
+#if (DEBUG)
+                    ReportUnknownThings(attributes.GetUnknownAttributes(), typeof(ProjectInfo).Name + " attributes");
+#endif
+                }
                 else
                     info.Properties.Add(row[0], row[1]);
             }
@@ -125,32 +150,79 @@ namespace BalsamiqArchiveModel.Model
                 // Read resource attributes
                 ResourceAttributes attributes = new ResourceAttributes(row[2]);
 
-                switch(attributes.Kind)
+#if (DEBUG)
+                ReportUnknownThings(attributes.GetUnknownAttributes(), typeof(ResourceAttributes).Name);
+#endif
+
+                switch (attributes.Kind)
                 {
                     case ResourceKind.Mockup:
-                        Mockup mockup = new Mockup();
-                        mockup.Id = row[0];
-                        mockup.BranchId = row[1];
-                        mockup.Attributes = attributes;
-                        mockup.Data = JObject.Parse(row[3]);
-
-                        project.Mockups.Add(mockup);
-                        break;
-
                     case ResourceKind.SymbolLibrary:
+                        // Create appropariate instance for each case and add to project
+                        AbstractControlContainer container;
+                        if (attributes.Kind == ResourceKind.Mockup)
+                        {
+                            container = new Mockup();
+                            project.Mockups.Add(container as Mockup);
+                        }
+                        else
+                        {
+                            container = new SymbolLibrary();
+                            project.SymbolLibraries.Add(container as SymbolLibrary);
+                        }
+                        
+                        // Set properties and attributes
+                        container.Id = row[0];
+                        container.BranchId = row[1];
+                        container.Attributes = attributes;
+
+                        // Load the 'data' value which is a JSON string, basically definition of all controls
+                        JObject mData = JObject.Parse(row[3]);
+                        if (mData != null && mData[MOCKUP_PROP] != null)
+                        {
+                            container.MeasuredW = (String)mData[MOCKUP_PROP][MEASUREDW_PROP];
+                            container.MeasuredH = (String)mData[MOCKUP_PROP][MEASUREDH_PROP];
+                            container.MockupW = (String)mData[MOCKUP_PROP][MOCKUPW_PROP];
+                            container.MockupH = (String)mData[MOCKUP_PROP][MOCKUPH_PROP];
+                            container.Version = (String)mData[MOCKUP_PROP][VERSION_PROP];
+
+                            if (mData[MOCKUP_PROP][CONTROLS_PROP] != null)
+                            {
+                                JToken control = mData[MOCKUP_PROP][CONTROLS_PROP][CONTROL_PROP];
+                                if (control != null)
+                                {
+                                    if (attributes.Kind == ResourceKind.Mockup)
+                                        (container as Mockup).Controls = control.ToObject<MockupControl[]>();
+                                    else
+                                        (container as SymbolLibrary).Symbols = control.ToObject<MockupSymbol[]>();
+                                }
+                                else
+                                {
+                                    Warning(String.Format("Empty {0}, may be removed: {1}", attributes.Kind.ToString().ToLower(), attributes.Name));
+                                }   
+                            }
+                        }
+
                         break;
 
                     case ResourceKind.Asset:
+
                         break;
 
-                    case ResourceKind.Unknown:
-                        throw new Exception(String.Format("Unkown resource kind: {0}", row[2]));
+                    default:
+                        Warning(String.Format("Unkown resource kind: {0}", row[2]));
+                        break;
                 }
-
-                //Console.WriteLine("======================== mockup data ======================");
-                //Console.WriteLine(JsonConvert.SerializeObject(attributes, Formatting.Indented));
-                //Console.WriteLine(JsonConvert.SerializeObject(JObject.Parse(row[3]), Formatting.Indented));
             }
+
+#if (DEBUG)
+            // Report unrecognized stuff... useful for adding more detail to
+            // model classes, which is useful for custom processing, and perhaps
+            // editing capabilities in the future
+            Dictionary<String, HashSet<String>> unknown = GetUnknownProperties(project);
+            foreach (String type in unknown.Keys)
+                ReportUnknownThings(unknown[type], type);
+#endif
         }
 
         private static void ValidDatabase(DatabaseAccess db, String sourceFile)
@@ -175,38 +247,102 @@ namespace BalsamiqArchiveModel.Model
             }
         }
 
+#if (DEBUG)
+        public static Dictionary<String, HashSet<String>> GetUnknownProperties(MockupProject project)
+        {
+            Dictionary<String, HashSet<String>> unknown = new Dictionary<String, HashSet<String>>();
+
+            String acType = typeof(AbstractControlContainer).Name;
+            unknown[acType] = new HashSet<String>();
+
+            String mcType = typeof(MockupControl).Name;
+            unknown[mcType] = new HashSet<String>();
+
+            String mcpType = typeof(ControlProperties).Name;
+            unknown[mcpType] = new HashSet<String>();
+
+            String msType = typeof(MockupSymbol).Name;
+            unknown[msType] = new HashSet<String>();
+
+            List<AbstractControlContainer> allContainers = new List<AbstractControlContainer>();
+            allContainers.AddRange(project.Mockups);
+            allContainers.AddRange(project.SymbolLibraries);
+
+            foreach (AbstractControlContainer container in allContainers)
+            {
+                // Check Mockup
+                foreach (String key in container.UnknownProperties.Keys)
+                    unknown[acType].Add(key);
+
+                // Check MockupControl
+                if (container is Mockup)
+                {
+                    Mockup m = (Mockup)container;
+                    if (m.Controls != null && m.Controls.Length > 0)
+                    {
+                        foreach (MockupControl c in m.Controls)
+                        {
+                            foreach (String key in c.UnknownProperties.Keys)
+                                unknown[mcType].Add(key);
+
+                            // Check MockupControlProperties
+                            if (c.Properties != null)
+                                foreach (String key in c.Properties.UnknownProperties.Keys)
+                                    unknown[mcpType].Add(key);
+                        }
+                    }
+                }
+                else if (container is SymbolLibrary)
+                {
+                    SymbolLibrary m = (SymbolLibrary)container;
+                    if (m.Symbols != null && m.Symbols.Length > 0)
+                    {
+                        foreach (MockupSymbol c in m.Symbols)
+                        {
+                            foreach (String key in c.UnknownProperties.Keys)
+                                unknown[msType].Add(key);
+
+                            // Check MockupControlProperties
+                            if (c.Properties != null)
+                                foreach (String key in c.Properties.UnknownProperties.Keys)
+                                    unknown[mcpType].Add(key);
+                        }
+                    }
+                }
+            }
+
+            return unknown;
+        }
+
+        private static void ReportUnknownThings(HashSet<String> unknownThings, String thingName)
+        {
+            if (unknownThings.Count == 0)
+                return;
+            
+            bool first = true;
+            StringBuilder s = new StringBuilder();
+            foreach (String u in unknownThings)
+            {
+                if (first)
+                {
+                    first = false;
+                    s.Append(u);
+                }
+                else
+                {
+                    s.Append(", ").Append(u);
+                }
+            } 
+
+            Warning(String.Format("Unknown {0}: {1}", thingName, s));
+        }
+#endif
+
+        private static void Warning(String message)
+        {
+            Console.WriteLine("warning: " + message);
+        }
+
         #endregion
     }
-
-    /*switch (row[0])
-                {
-                    case ProjectInfo.ATTRIBUTES_PROP:
-                        // The value is JSON string, so extract attributes
-                        JObject attributes = JObject.Parse(row[1]);
-                        info.name = (String)attributes[ProjectInfo.NAME_PROP];
-                        long date = (long)attributes[ProjectInfo.DATE_PROP];
-                        info.creationDate = new DateTime(date);
-
-                        break;
-
-                    case ProjectInfo.FORMAT_PROP:
-                        info.archiveFormat = row[1];
-                        break;
-
-                    case ProjectInfo.REVISION_PROP:
-                        info.archiveRevision = row[1];
-                        break;
-
-                    case ProjectInfo.REVISION_UUID_PROP:
-                        info.archiveRevisionUuid = row[1];
-                        break;
-
-                    case ProjectInfo.SCHEMA_PROP:
-                        info.schemaVersion = new Version(row[1]);
-                        break;
-
-                    default:
-                        info.otherProperties.Add(row[0], row[1]);
-                        break;
-                }*/
 }
