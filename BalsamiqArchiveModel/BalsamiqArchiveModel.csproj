@@ -55,7 +55,7 @@
     <Compile Include="Model\BalsamiqArchiveAttributes.cs" />
     <Compile Include="Model\BalsamiqArchiveReader.cs" />
     <Compile Include="Model\Mockup.cs" />
-    <Compile Include="Model\MockupAsset.cs" />
+    <Compile Include="Model\ProjectAsset.cs" />
     <Compile Include="Model\MockupControl.cs" />
     <Compile Include="Model\ControlProperties.cs" />
     <Compile Include="Model\MockupProject.cs" />

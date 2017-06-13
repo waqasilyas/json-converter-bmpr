@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using BalsamiqArchiveModel.Database;
 using Newtonsoft.Json.Linq;
+using System.Security.Cryptography;
 
 namespace BalsamiqArchiveModel.Model
 {
@@ -73,7 +74,7 @@ namespace BalsamiqArchiveModel.Model
                 // Load info
                 project.Info = InternalLoadProjectInfo(db);
 
-                // Load mockups
+                // Load resources
                 InternalLoadResources(db, project);
             } 
 
@@ -206,7 +207,20 @@ namespace BalsamiqArchiveModel.Model
                         break;
 
                     case ResourceKind.Asset:
+                        ProjectAsset asset = new ProjectAsset();
+                        asset.Id = row[0];
+                        asset.BranchId = row[1];
+                        asset.Attributes = attributes;
+                        asset.Data = row[3];
 
+                        using (MD5 md5 = MD5.Create())
+                        {
+                            byte[] b = ASCIIEncoding.ASCII.GetBytes(asset.Data);
+                            b = md5.ComputeHash(b);
+                            asset.DataHash = BitConverter.ToString(b);
+                        }
+
+                        project.Assets.Add(asset);
                         break;
 
                     default:
