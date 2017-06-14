@@ -34,4 +34,4 @@ In this regard the main objectives are:
 Copyright (c) 2017 Waqas Ilyas
 Licenced under [MIT License](LICENSE)
 
-Balsamiq is a trademark of [Balsamiq Studios, LLC](https://balsamiq.com)
+Balsamiq is a trademark of Giacomo Guilizzoni, licensed to Balsamiq SRL and [Balsamiq Studios, LLC](https://balsamiq.com/termsofuse/)
