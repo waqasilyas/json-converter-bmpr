@@ -1,4 +1,4 @@
-﻿namespace BalsamiqArchiveModel.Model
+﻿namespace BmprArchiveModel.Model
 {
     public class MockupControl : AbstractControl
     {

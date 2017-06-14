@@ -4,9 +4,9 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace BalsamiqArchiveModel.Model
+namespace BmprArchiveModel.Model
 {
-    public class ResourceAttributes : BalsamiqArchiveAttributes
+    public class ResourceAttributes : BmprArchiveAttributes
     {
         public const String IMPORTED_ATTRIB = "importedFrom";
         public const String KIND_ATTRIB = "kind";

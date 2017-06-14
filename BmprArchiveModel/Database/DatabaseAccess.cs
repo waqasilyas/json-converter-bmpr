@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 
-namespace BalsamiqArchiveModel.Database
+namespace BmprArchiveModel.Database
 {
     public class DatabaseAccess : IDisposable
     {

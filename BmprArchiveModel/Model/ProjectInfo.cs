@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BalsamiqArchiveModel.Model
+namespace BmprArchiveModel.Model
 {
     public class ProjectInfo
     {
@@ -62,7 +62,7 @@ namespace BalsamiqArchiveModel.Model
         #endregion
     }
 
-    public class ProjectInfoArchiveAttributes : BalsamiqArchiveAttributes
+    public class ProjectInfoArchiveAttributes : BmprArchiveAttributes
     {
         public ProjectInfoArchiveAttributes(String attributesJson) : base(attributesJson) { }
     }

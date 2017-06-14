@@ -7,8 +7,8 @@
     <ProjectGuid>{C5BFCD90-7EB5-4DC3-B5F4-87C1378D4966}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JsonConverterBalsamiq</RootNamespace>
-    <AssemblyName>JsonConverterBalsamiq</AssemblyName>
+    <RootNamespace>JsonConverterBmpr</RootNamespace>
+    <AssemblyName>JsonConverterBmpr</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -64,9 +64,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BalsamiqArchiveModel\BalsamiqArchiveModel.csproj">
+    <ProjectReference Include="..\BmprArchiveModel\BmprArchiveModel.csproj">
       <Project>{1f69c6dd-4a92-48f4-8d04-c7a0910fb346}</Project>
-      <Name>BalsamiqArchiveModel</Name>
+      <Name>BmprArchiveModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

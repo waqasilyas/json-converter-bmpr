@@ -1,5 +1,5 @@
-# JSON Converter for Balsamiq
-A simple command line utility that converts a Balsamiq Mockups file (\*.bmpr) to readable JSON.
+# JSON Converter for BMPR
+A simple command line utility that converts a Balsamiq Mockups Project file (\*.bmpr) to readable JSON, for quick viewing.
 
 ## What?
 The **B**alsamiq **M**ockups 3 **Pr**oject file created by the desktop application (\*.bmpr) is a binary format called **B**alsamiq **Ar**chive ([BAR](https://support.balsamiq.com/resources/bmpr-format/)). This is fact an SQLite database file, with four tables INFO, RESOURCES, BRANCHES, and THUMBNAILS. Many values in these tables are JSON strings. In previous versions the project was defined as a directory containing Balsamiq Mockups Markup Language (BMML) files that were in human-readable XML format that has a lot of advantages. This utility allows enjoying same advantages of a text based format by converting BMPR to a readable JSON. 

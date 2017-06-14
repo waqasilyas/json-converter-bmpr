@@ -7,8 +7,8 @@
     <ProjectGuid>{1F69C6DD-4A92-48F4-8D04-C7A0910FB346}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BalsamiqArchiveModel</RootNamespace>
-    <AssemblyName>BalsamiqArchiveModel</AssemblyName>
+    <RootNamespace>BmprArchiveModel</RootNamespace>
+    <AssemblyName>BmprArchiveModel</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -52,8 +52,8 @@
   <ItemGroup>
     <Compile Include="Database\DatabaseAccess.cs" />
     <Compile Include="Model\AbstractControlContainer.cs" />
-    <Compile Include="Model\BalsamiqArchiveAttributes.cs" />
-    <Compile Include="Model\BalsamiqArchiveReader.cs" />
+    <Compile Include="Model\BmprArchiveAttributes.cs" />
+    <Compile Include="Model\BmprArchiveReader.cs" />
     <Compile Include="Model\Mockup.cs" />
     <Compile Include="Model\ProjectAsset.cs" />
     <Compile Include="Model\MockupControl.cs" />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace BalsamiqArchiveModel.Model
+namespace BmprArchiveModel.Model
 {
     public abstract class AbstractControl
     {

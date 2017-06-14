@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using BalsamiqArchiveModel.Database;
+using BmprArchiveModel.Database;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 
-namespace BalsamiqArchiveModel.Model
+namespace BmprArchiveModel.Model
 {
-    public class BalsamiqArchiveReader
+    public class BmprArchiveReader
     {
         #region Enum
 
         /// <summary>
-        /// Tables of a Balsamiq Archive (BAR) which is an SQL database
+        /// Tables of a Bmpr Archive (BAR) which is an SQL database
         /// </summary>
         public enum BarTable
         {
@@ -60,7 +60,7 @@ namespace BalsamiqArchiveModel.Model
         /// <summary>
         /// Loads the mockup project into the model
         /// </summary>
-        /// <param name="sourceFile">the Balsamiq Mockup archive file</param>
+        /// <param name="sourceFile">the mockup archive file</param>
         /// <returns></returns>
         public static MockupProject LoadProject(String sourceFile)
         {
@@ -136,7 +136,7 @@ namespace BalsamiqArchiveModel.Model
             if (info.SchemaVersion == null 
                 || ProjectInfo.SUPPORTED_SCHEMA.Major != new Version(info.SchemaVersion).Major)
                 // Not a supported schema, throw exception
-                throw new Exception(String.Format("Invalid balsamiq archive format. Only version {0} is supported.", ProjectInfo.SUPPORTED_SCHEMA));
+                throw new Exception(String.Format("Invalid bmpr archive format. Only version {0} is supported.", ProjectInfo.SUPPORTED_SCHEMA));
 
             return info;
         }
@@ -246,7 +246,7 @@ namespace BalsamiqArchiveModel.Model
             {
                 // Verify the required tables exist
                 if (!tableList.Contains(table.ToString()))
-                    throw new Exception(String.Format("Invalid balsamiq archive (missing tables): {0}", sourceFile));
+                    throw new Exception(String.Format("Invalid bmpr archive (missing tables): {0}", sourceFile));
 
                 // verify columns
                 FieldInfo field = table.GetType().GetField(table.ToString());
@@ -256,7 +256,7 @@ namespace BalsamiqArchiveModel.Model
                 foreach (String col in attributes[0].ColumnNames)
                 {
                     if (!columnNames.Contains(col))
-                        throw new Exception(String.Format("Invalid balsamiq archive (missing column '{0}.{1}'): {2}", table, col, sourceFile));
+                        throw new Exception(String.Format("Invalid bmpr archive (missing column '{0}.{1}'): {2}", table, col, sourceFile));
                 }
             }
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace BalsamiqArchiveModel.Model
+namespace BmprArchiveModel.Model
 {
     public class ProjectAsset
     {

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("JsonConverterBalsamiq")]
+[assembly: AssemblyTitle("JsonConverterBmpr")]
 [assembly: AssemblyDescription("Converts a BMPR file to JSON")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("JsonConverterBalsamiq")]
+[assembly: AssemblyProduct("JsonConverterBmpr")]
 [assembly: AssemblyCopyright("Copyright ©  2017 Waqas Ilyas")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BalsamiqArchiveModel.Model
+namespace BmprArchiveModel.Model
 {
     public class MockupProject
     {

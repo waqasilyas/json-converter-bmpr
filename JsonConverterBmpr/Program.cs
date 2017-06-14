@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
-using BalsamiqArchiveModel.Model;
+using BmprArchiveModel.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace JsonConverterBalsamiq
+namespace JsonConverterBmpr
 {
     class Program
     {
@@ -66,7 +66,7 @@ namespace JsonConverterBalsamiq
                 }
 
                 // Load project file
-                MockupProject project = BalsamiqArchiveReader.LoadProject(source);
+                MockupProject project = BmprArchiveReader.LoadProject(source);
 
                 // Create a writer
                 TextWriter writer;
@@ -116,14 +116,14 @@ namespace JsonConverterBalsamiq
         static void PrintHeader()
         {
             Console.WriteLine("This program dumps the contents of a Balsamic Mockups project file (*.bmpr) into a JSON text file." +
-                "\nFor more details, see: https://github.com/waqasilyas/JsonConverterBalsamiq/wiki \n");
+                "\nFor more details, see: https://github.com/waqasilyas/json-converter-bmpr \n");
         }
 
         static void PrintHelp()
         {
             PrintHeader();
             Console.WriteLine(@"Usage: 
-    JsonConverterBalsamiq.exe [-hf] SOURCE [TARGET]
+    JsonConverterBmpr.exe [-hf] SOURCE [TARGET]
 
     SOURCE    A *.bmpr file to convert.
     TARGET    The destination file to save the JSON output. If not give, the JSON is emitted on standard output.

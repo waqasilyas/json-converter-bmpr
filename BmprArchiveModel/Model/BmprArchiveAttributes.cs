@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace BalsamiqArchiveModel.Model
+namespace BmprArchiveModel.Model
 {
     [JsonObject(MemberSerialization.OptOut)]
-    public class BalsamiqArchiveAttributes
+    public class BmprArchiveAttributes
     {
         public const String NAME_ATTRIB = "name";
         public const String DATE_ATTRIB = "creationDate";
 
         public static readonly DateTime EPOCH = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        public BalsamiqArchiveAttributes(String attributesJson)
+        public BmprArchiveAttributes(String attributesJson)
         {
             InputJson = attributesJson;
 
