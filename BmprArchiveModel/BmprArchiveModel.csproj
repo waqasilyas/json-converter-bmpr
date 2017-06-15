@@ -52,18 +52,21 @@
   <ItemGroup>
     <Compile Include="Database\DatabaseAccess.cs" />
     <Compile Include="Model\AbstractControlContainer.cs" />
-    <Compile Include="Model\BmprArchiveAttributes.cs" />
     <Compile Include="Model\BmprArchiveReader.cs" />
+    <Compile Include="Model\BranchInfo.cs" />
     <Compile Include="Model\Mockup.cs" />
+    <Compile Include="Model\MockupThumbnail.cs" />
     <Compile Include="Model\ProjectAsset.cs" />
     <Compile Include="Model\MockupControl.cs" />
-    <Compile Include="Model\ControlProperties.cs" />
+    <Compile Include="Model\Properties\CommonNamedAttributes.cs" />
+    <Compile Include="Model\Properties\ControlProperties.cs" />
     <Compile Include="Model\MockupProject.cs" />
     <Compile Include="Model\MockupSymbol.cs" />
+    <Compile Include="Model\Properties\BmprAttributes.cs" />
+    <Compile Include="Model\Properties\ResourceAttributes.cs" />
     <Compile Include="Model\SymbolLibrary.cs" />
     <Compile Include="Model\AbstractControl.cs" />
     <Compile Include="Model\ProjectInfo.cs" />
-    <Compile Include="Model\ResourceAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+using BmprArchiveModel.Model.Properties;
+
 namespace BmprArchiveModel.Model
 {
     public abstract class AbstractControl

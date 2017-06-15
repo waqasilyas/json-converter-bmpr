@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+using BmprArchiveModel.Model.Properties;
+
 namespace BmprArchiveModel.Model
 {
     [JsonObject(MemberSerialization.OptOut)]

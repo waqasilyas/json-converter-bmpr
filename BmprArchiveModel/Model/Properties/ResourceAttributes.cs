@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
-namespace BmprArchiveModel.Model
+namespace BmprArchiveModel.Model.Properties
 {
-    public class ResourceAttributes : BmprArchiveAttributes
+    public class ResourceAttributes : CommonNamedAttributes
     {
         public const String IMPORTED_ATTRIB = "importedFrom";
         public const String KIND_ATTRIB = "kind";
@@ -85,7 +86,7 @@ namespace BmprArchiveModel.Model
             }
         }
 
-        [JsonProperty(Order = 9)]
+        [JsonProperty(Order = 11)]
         public String ModifiedBy
         {
             get
@@ -94,7 +95,7 @@ namespace BmprArchiveModel.Model
             }
         }
 
-        [JsonProperty(Order = 10)]
+        [JsonProperty(Order = 12)]
         public String MimeType
         {
             get
@@ -103,7 +104,7 @@ namespace BmprArchiveModel.Model
             }
         }
 
-        [JsonProperty(Order = 11)]
+        [JsonProperty(Order = 13)]
         public Uri ImportedFrom
         {
             get
@@ -119,7 +120,7 @@ namespace BmprArchiveModel.Model
         #endregion
 
 #if (DEBUG)
-        public override List<String> GetKnownAttributes()
+        protected override List<String> GetKnownAttributes()
         {
             List<String> known = base.GetKnownAttributes();
             known.AddRange(new String[]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BmprArchiveModel.Model.Properties;
 using Newtonsoft.Json;
 
 namespace BmprArchiveModel.Model
@@ -62,7 +63,7 @@ namespace BmprArchiveModel.Model
         #endregion
     }
 
-    public class ProjectInfoArchiveAttributes : BmprArchiveAttributes
+    public class ProjectInfoArchiveAttributes : CommonNamedAttributes
     {
         public ProjectInfoArchiveAttributes(String attributesJson) : base(attributesJson) { }
     }

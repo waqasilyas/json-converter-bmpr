@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using BmprArchiveModel.Database;
+using BmprArchiveModel.Model.Properties;
 using Newtonsoft.Json.Linq;
-using System.Security.Cryptography;
 
 namespace BmprArchiveModel.Model
 {
@@ -76,7 +76,13 @@ namespace BmprArchiveModel.Model
 
                 // Load resources
                 InternalLoadResources(db, project);
-            } 
+
+                // Load branches
+                InternalLoadBranches(db, project);
+
+                // Load thumbnails
+                InternalLoadThumbnails(db, project);
+            }
 
             return project;
         }
@@ -97,17 +103,6 @@ namespace BmprArchiveModel.Model
             }
         }
 
-        /*public static Mockup[] LoadResources(String sourceFile)
-        {
-            using (DatabaseAccess db = new DatabaseAccess(sourceFile))
-            {
-                // Validate database schema
-                ValidDatabase(db, sourceFile);
-
-                return InternalLoadResources(db);
-            }
-        }*/
-
         #endregion
 
         #region PrivateStatic
@@ -121,6 +116,9 @@ namespace BmprArchiveModel.Model
             {
                 if (row[0].Equals(ProjectInfo.ATTRIBUTES_PROP))
                 {
+                    if (row[0].Length == 0)
+                        row[0] = "{}";
+
                     ProjectInfoArchiveAttributes attributes = new ProjectInfoArchiveAttributes(row[1]);
                     info.Properties.Add(row[0], attributes);
 
@@ -148,6 +146,9 @@ namespace BmprArchiveModel.Model
             String[][] data = db.GetTableContent(BarTable.RESOURCES.ToString());
             foreach (String[] row in data)
             {
+                if (row[2].Length == 0)
+                    row[2] = "{}";
+
                 // Read resource attributes
                 ResourceAttributes attributes = new ResourceAttributes(row[2]);
 
@@ -239,6 +240,63 @@ namespace BmprArchiveModel.Model
 #endif
         }
 
+        private static void InternalLoadBranches(DatabaseAccess db, MockupProject project)
+        {
+            String[][] data = db.GetTableContent(BarTable.BRANCHES.ToString());
+            foreach (String[] row in data)
+            {
+                BranchInfo branch = new BranchInfo();
+                branch.Id = row[0];
+
+                // Read resource attributes
+                if (row[1].Length == 0)
+                    row[1] = "{}";
+
+                BmprAttributes attributes = new BmprAttributes(row[1]);
+                branch.Attributes = attributes;
+
+                project.Branches.Add(branch);
+            }
+
+#if (DEBUG)
+            // Report unrecognized attributes
+            HashSet<String> unknown = new HashSet<string>();
+            foreach (BranchInfo branch in project.Branches)
+                foreach (String u in branch.Attributes.GetUnknownAttributes())
+                    unknown.Add(u);
+
+            ReportUnknownThings(unknown, typeof(BranchInfo).Name);
+#endif
+        }
+
+        private static void InternalLoadThumbnails(DatabaseAccess db, MockupProject project)
+        {
+            String[][] data = db.GetTableContent(BarTable.BRANCHES.ToString());
+            foreach (String[] row in data)
+            {
+                MockupThumbnail thumbnail = new MockupThumbnail();
+                thumbnail.Id = row[0];
+
+                if (row[1].Length == 0)
+                    row[1] = "{}";
+
+                ControlProperties attributes = JObject.Parse(row[1]).ToObject<ControlProperties>();
+                thumbnail.Attributes = attributes;
+
+                project.Thumbnails.Add(thumbnail);
+            }
+
+#if (DEBUG)
+            // Report unrecognized attributes
+            HashSet<String> unknown = new HashSet<string>();
+            foreach (MockupThumbnail thumbnail in project.Thumbnails)
+                foreach (String u in thumbnail.Attributes.UnknownProperties.Keys)
+                    unknown.Add(u);
+
+            ReportUnknownThings(unknown, typeof(MockupThumbnail).Name);
+#endif
+        }
+
         private static void ValidDatabase(DatabaseAccess db, String sourceFile)
         {
             String[] tableList = db.GetTableList();
@@ -249,7 +307,7 @@ namespace BmprArchiveModel.Model
                     throw new Exception(String.Format("Invalid bmpr archive (missing tables): {0}", sourceFile));
 
                 // verify columns
-                FieldInfo field = table.GetType().GetField(table.ToString());
+                System.Reflection.FieldInfo field = table.GetType().GetField(table.ToString());
                 ColumnInfoAttribute[] attributes = field.GetCustomAttributes(typeof(ColumnInfoAttribute), false) as ColumnInfoAttribute[];
 
                 String[] columnNames = db.GetColumnNames(table.ToString());
@@ -260,6 +318,15 @@ namespace BmprArchiveModel.Model
                 }
             }
         }
+
+        private static void Warning(String message)
+        {
+            Console.WriteLine("warning: " + message);
+        }
+
+        #endregion
+
+        #region DebugInfo
 
 #if (DEBUG)
         public static Dictionary<String, HashSet<String>> GetUnknownProperties(MockupProject project)
@@ -351,12 +418,6 @@ namespace BmprArchiveModel.Model
             Warning(String.Format("Unknown {0}: {1}", thingName, s));
         }
 #endif
-
-        private static void Warning(String message)
-        {
-            Console.WriteLine("warning: " + message);
-        }
-
         #endregion
     }
 }
