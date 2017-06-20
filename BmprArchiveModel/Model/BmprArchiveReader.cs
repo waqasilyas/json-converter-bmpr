@@ -123,7 +123,7 @@ namespace BmprArchiveModel.Model
                     info.Properties.Add(row[0], attributes);
 
 #if (DEBUG)
-                    ReportUnknownThings(attributes.GetUnknownAttributes(), typeof(ProjectInfo).Name + " attributes");
+                    ReportUnknownThings(attributes.Unknown, typeof(ProjectInfo).Name + " attributes");
 #endif
                 }
                 else
@@ -153,7 +153,7 @@ namespace BmprArchiveModel.Model
                 ResourceAttributes attributes = new ResourceAttributes(row[2]);
 
 #if (DEBUG)
-                ReportUnknownThings(attributes.GetUnknownAttributes(), typeof(ResourceAttributes).Name);
+                ReportUnknownThings(attributes.Unknown, typeof(ResourceAttributes).Name);
 #endif
 
                 switch (attributes.Kind)
@@ -252,9 +252,7 @@ namespace BmprArchiveModel.Model
                 if (row[1].Length == 0)
                     row[1] = "{}";
 
-                BmprAttributes attributes = new BmprAttributes(row[1]);
-                branch.Attributes = attributes;
-
+                branch.Attributes = JObject.Parse(row[1]).ToObject<Dictionary<String, JToken>>();
                 project.Branches.Add(branch);
             }
 
@@ -262,7 +260,7 @@ namespace BmprArchiveModel.Model
             // Report unrecognized attributes
             HashSet<String> unknown = new HashSet<string>();
             foreach (BranchInfo branch in project.Branches)
-                foreach (String u in branch.Attributes.GetUnknownAttributes())
+                foreach (String u in branch.Attributes.Keys)
                     unknown.Add(u);
 
             ReportUnknownThings(unknown, typeof(BranchInfo).Name);
@@ -280,9 +278,7 @@ namespace BmprArchiveModel.Model
                 if (row[1].Length == 0)
                     row[1] = "{}";
 
-                ControlProperties attributes = JObject.Parse(row[1]).ToObject<ControlProperties>();
-                thumbnail.Attributes = attributes;
-
+                thumbnail.Attributes = JObject.Parse(row[1]).ToObject<Dictionary<String, JToken>>();
                 project.Thumbnails.Add(thumbnail);
             }
 
@@ -290,7 +286,7 @@ namespace BmprArchiveModel.Model
             // Report unrecognized attributes
             HashSet<String> unknown = new HashSet<string>();
             foreach (MockupThumbnail thumbnail in project.Thumbnails)
-                foreach (String u in thumbnail.Attributes.UnknownProperties.Keys)
+                foreach (String u in thumbnail.Attributes.Keys)
                     unknown.Add(u);
 
             ReportUnknownThings(unknown, typeof(MockupThumbnail).Name);
@@ -368,7 +364,7 @@ namespace BmprArchiveModel.Model
 
                             // Check MockupControlProperties
                             if (c.Properties != null)
-                                foreach (String key in c.Properties.UnknownProperties.Keys)
+                                foreach (String key in c.Properties.Unknown.Keys)
                                     unknown[mcpType].Add(key);
                         }
                     }
@@ -385,7 +381,7 @@ namespace BmprArchiveModel.Model
 
                             // Check MockupControlProperties
                             if (c.Properties != null)
-                                foreach (String key in c.Properties.UnknownProperties.Keys)
+                                foreach (String key in c.Properties.Unknown.Keys)
                                     unknown[mcpType].Add(key);
                         }
                     }

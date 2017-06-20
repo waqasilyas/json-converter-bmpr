@@ -1,11 +1,12 @@
 ﻿using System;
-using BmprArchiveModel.Model.Properties;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace BmprArchiveModel.Model
 {
     public class MockupThumbnail
     {
         public String Id { get; set; }
-        public ControlProperties Attributes;
+        public Dictionary<String, JToken> Attributes { get; set; }
     }
 }

@@ -19,6 +19,7 @@ In this regard the main objectives are:
   * Can possibly copy the "Children" after deserializing and then set to null so gets ignored while serializing, and remove unnecessary hierarchy from copy through a new property
   * Or can selectively parse fragments of the JSON to populate AbstractControl
 * Convert all TODO and wish list items to issues
+* Sort everything, like resources list etc so that they always appear in the same order
 
 ## Wish List
 * Instead of emitting byte data for binary assets which is useless for readablity, start showing a hash instead so differences could be identified without bloat
@@ -35,3 +36,5 @@ Copyright (c) 2017 Waqas Ilyas
 Licenced under [MIT License](LICENSE)
 
 Balsamiq is a trademark of Giacomo Guilizzoni, licensed to Balsamiq SRL and [Balsamiq Studios, LLC](https://balsamiq.com/termsofuse/)
+
+This software uses third-party libraries that are distributed under their own terms, see [LICENSE-3RD-PARTY](LICENSE-3RD-PARTY.md)

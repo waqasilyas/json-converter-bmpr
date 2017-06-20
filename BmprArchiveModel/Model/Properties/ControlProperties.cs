@@ -9,10 +9,10 @@ namespace BmprArchiveModel.Model.Properties
     public class ControlProperties
     {
         // There are too many properties so not adding more here, until there is a need
-        public static String Text { get; set; }
-        public static String State { get; set; }
+        public String Text { get; set; }
+        public String State { get; set; }
 
         [JsonExtensionData]
-        public Dictionary<String, JToken> UnknownProperties { get; set; } = new Dictionary<String, JToken>();
+        public Dictionary<String, JToken> Unknown { get; set; } = new Dictionary<String, JToken>();
     }
 }

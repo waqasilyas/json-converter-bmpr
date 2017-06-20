@@ -7,53 +7,32 @@ using Newtonsoft.Json.Linq;
 namespace BmprArchiveModel.Model.Properties
 {
     [JsonObject(MemberSerialization.OptOut)]
-    public class BmprAttributes
+    public abstract class BmprAttributes
     {
         public BmprAttributes(String attributesJson)
         {
             InputJson = attributesJson;
 
             // Parse Json and collect attributes
-            Attributes = JObject.Parse(InputJson);
+            var attributes = JObject.Parse(InputJson);
+            initializeAttributes(attributes);
+
+            // Save the rest of the attributes as unknown
+            Unknown = new HashSet<String>(attributes.ToObject<Dictionary<String, JToken>>().Keys);
         }
 
         [JsonIgnore]
         private String InputJson;
 
-        public virtual JObject Attributes { get; set; }
-
-#if (DEBUG)
-        #region DebugInfo
+        [JsonIgnore]
+        public HashSet<String> Unknown { get; }
 
         /// <summary>
-        /// To identify known attributes so that we can evaluate unknown ones
+        /// Initializes the attributes known to this class, or any child class. All overriding classes
+        /// should remove the known attributes after initializing. Any attributes remaining after 
+        /// the call to this method will be considered "unknown" and could raise warnings.
         /// </summary>
-        /// <returns></returns>
-        protected virtual List<String> GetKnownAttributes()
-        {
-            return new List<String>();
-        }
-
-        /// <summary>
-        /// To identify and emit warnings about extra and unkown properties that were read
-        /// </summary>
-        /// <returns></returns>
-        public HashSet<String> GetUnknownAttributes()
-        {
-            List<String> known = GetKnownAttributes();
-            HashSet<String> unknown = new HashSet<String>();
-
-            Dictionary<String, Object> all = Attributes.ToObject<Dictionary<String, Object>>();
-            foreach (String key in all.Keys)
-            {
-                if (!known.Contains(key))
-                    unknown.Add(key);
-            }
-
-            return unknown;
-        }
+        /// <param name="attributes"></param>
+        protected abstract void initializeAttributes(JObject attributes);
     }
-
-    #endregion
-#endif
 }

@@ -15,49 +15,28 @@ namespace BmprArchiveModel.Model.Properties
 
         public CommonNamedAttributes(String attributesJson) : base(attributesJson) { }
 
+        protected override void initializeAttributes(JObject attributes)
+        {
+            Name = (String)attributes[NAME_ATTRIB];
+
+            if (attributes[DATE_ATTRIB] != null)
+            {
+                // The date is in Unix epoch format
+                CreationDate = EPOCH.AddMilliseconds((long)attributes[DATE_ATTRIB]);
+            }
+
+            attributes.Remove(NAME_ATTRIB);
+            attributes.Remove(DATE_ATTRIB);
+        }
+
         #region Properties
 
         [JsonProperty(Order = 1)]
-        public String Name
-        {
-            get
-            {
-                return (String)Attributes[NAME_ATTRIB];
-            }
-        }
+        public String Name { get; set; }
 
         [JsonProperty(Order = 10)]
-        public DateTime CreationDate
-        {
-            get
-            {
-                // The creation date is in attributes defined using JSON
-                if (Attributes[DATE_ATTRIB] != null)
-                {
-                    // The date is in Unix epoch format
-                    return EPOCH.AddMilliseconds((long)Attributes[DATE_ATTRIB]);
-                }
-                
-                return DateTime.MinValue;
-            }
-        }
-
-        [JsonIgnore]
-        public override JObject Attributes { get; set; }
+        public DateTime? CreationDate { get; set; }
 
         #endregion
-
-#if (DEBUG)
-
-        /// <summary>
-        /// To identify known attributes so that we can evaluate unknown ones
-        /// </summary>
-        /// <returns></returns>
-        protected override List<String> GetKnownAttributes()
-        {
-            return new List<String>(new String[] { NAME_ATTRIB, DATE_ATTRIB });
-        }
-
-#endif
     }
 }

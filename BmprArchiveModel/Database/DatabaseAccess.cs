@@ -14,9 +14,9 @@ namespace BmprArchiveModel.Database
 
         #region Public
 
-        public DatabaseAccess(String bmprFile)
+        public DatabaseAccess(String sqliteFile)
         {
-            Connection = new SQLiteConnection(String.Format("Data Source={0};Version=3;Read Only=True;", bmprFile));
+            Connection = new SQLiteConnection(String.Format("Data Source={0};Version=3;Read Only=True;", sqliteFile));
             Connection.Open();
         }
 

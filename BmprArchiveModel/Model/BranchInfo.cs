@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using BmprArchiveModel.Model.Properties;
+using Newtonsoft.Json.Linq;
 
 namespace BmprArchiveModel.Model
 {
     public class BranchInfo
     {
         public String Id { get; set; }
-        public BmprAttributes Attributes { get; set; }
+        public Dictionary<String, JToken> Attributes { get; set; }
     }
 }

@@ -51,13 +51,17 @@ namespace BmprArchiveModel.Model
         #endregion
     }
 
-    // This class is just empty container to match JSON hierarchy
+    /// <summary>
+    /// This class is just empty container to match JSON hierarchy
+    /// </summary>
     public class MockupControlChildren
     {
         public MockupControlContainer Controls { get; set; }
     }
 
-    // This class is just empty container to match JSON hierarchy
+    /// <summary>
+    /// This class is just empty container to match JSON hierarchy
+    /// </summary>
     public class MockupControlContainer
     {
         public MockupControl[] Control { get; set; }
