@@ -1,9 +1,6 @@
+# The MIT License (MIT)
+### Applies to: [Json.NET](https://github.com/JamesNK/Newtonsoft.Json), Copyright (c) 2007 James Newton-King
 -----------------------------------------------------------------------------
-                        The MIT License (MIT)
-        Applies to: 
-        - [Json.NET](https://github.com/JamesNK/Newtonsoft.Json), Copyright (c) 2007 James Newton-King
------------------------------------------------------------------------------
-
 The MIT License (MIT)
 
 Copyright (c) 2007 James Newton-King
