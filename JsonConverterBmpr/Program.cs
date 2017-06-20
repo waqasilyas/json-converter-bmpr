@@ -38,7 +38,7 @@ namespace JsonConverterBmpr
                         {
                             PrintError(String.Format("Unknown flag '{0}'\n", a));
                             PrintHelp();
-                            return;
+                            Environment.Exit(ErrorBadArguments);
                         }
                     }
                     else if (source == null)
@@ -56,7 +56,7 @@ namespace JsonConverterBmpr
                 if (source == null)
                 {
                     PrintHelp();
-                    return;
+                    Environment.Exit(ErrorBadArguments);
                 }
 
                 if (!File.Exists(source))
