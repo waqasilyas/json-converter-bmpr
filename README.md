@@ -13,6 +13,16 @@ In this regard the main objectives are:
   * Try to match UI concepts and workflow while structuring the JSON, as compared to representing the underlying RDBMS organization
   * Try to order properties to increase readability, like having ID, name, type kind of properties at the top under an object
 * Friendly to diff tools, don't rely on a lot of command line options
+
+# Usage
+```
+JsonConverterBmpr.exe [-hf] SOURCE [TARGET]
+
+    SOURCE    A *.bmpr file to convert.
+    TARGET    The destination file to save the JSON output. If not give, the JSON is emitted on standard output.
+    -f        Force overwrite if TARGET exists
+    -h        Prints this description.
+```
  
 # TODO
 * Simplify the awkward mockup.controls.control.children.controls.control hierarchy
