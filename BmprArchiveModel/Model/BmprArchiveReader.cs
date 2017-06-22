@@ -62,7 +62,7 @@ namespace BmprArchiveModel.Model
         /// </summary>
         /// <param name="sourceFile">the mockup archive file</param>
         /// <returns></returns>
-        public static MockupProject LoadProject(String sourceFile)
+        public static MockupProject LoadProject(String sourceFile, bool createHashes)
         {
             MockupProject project = new MockupProject();
 
@@ -75,13 +75,13 @@ namespace BmprArchiveModel.Model
                 project.Info = InternalLoadProjectInfo(db);
 
                 // Load resources
-                InternalLoadResources(db, project);
+                InternalLoadResources(db, project, createHashes);
 
                 // Load branches
                 InternalLoadBranches(db, project);
 
                 // Load thumbnails
-                InternalLoadThumbnails(db, project);
+                InternalLoadThumbnails(db, project, createHashes);
             }
 
             return project;
@@ -139,7 +139,7 @@ namespace BmprArchiveModel.Model
             return info;
         }
 
-        private static void InternalLoadResources(DatabaseAccess db, MockupProject project)
+        private static void InternalLoadResources(DatabaseAccess db, MockupProject project, bool createHashes)
         {
             List<Mockup> mockups = new List<Mockup>();
 
@@ -198,7 +198,7 @@ namespace BmprArchiveModel.Model
                                     else
                                         (container as SymbolLibrary).Symbols = control.ToObject<MockupSymbol[]>();
                                 }
-                                else
+                                else if (!attributes.Trashed)
                                 {
                                     Warning(String.Format("Empty {0}, may be removed: {1}", attributes.Kind.ToString().ToLower(), attributes.Name));
                                 }   
@@ -214,11 +214,17 @@ namespace BmprArchiveModel.Model
                         asset.Attributes = attributes;
                         asset.Data = row[3];
 
-                        using (MD5 md5 = MD5.Create())
+                        if (createHashes)
                         {
-                            byte[] b = ASCIIEncoding.ASCII.GetBytes(asset.Data);
-                            b = md5.ComputeHash(b);
-                            asset.DataHash = BitConverter.ToString(b);
+                            using (MD5 md5 = MD5.Create())
+                            {
+                                byte[] b = ASCIIEncoding.ASCII.GetBytes(asset.Data);
+                                b = md5.ComputeHash(b);
+                                asset.DataHash = BitConverter.ToString(b);
+
+                                // Dont want to show data if using hashes
+                                asset.Data = null;
+                            }
                         }
 
                         project.Assets.Add(asset);
@@ -267,29 +273,45 @@ namespace BmprArchiveModel.Model
 #endif
         }
 
-        private static void InternalLoadThumbnails(DatabaseAccess db, MockupProject project)
+        private static void InternalLoadThumbnails(DatabaseAccess db, MockupProject project, bool createHashes)
         {
-            String[][] data = db.GetTableContent(BarTable.BRANCHES.ToString());
+            String[][] data = db.GetTableContent(BarTable.THUMBNAILS.ToString());
             foreach (String[] row in data)
             {
-                MockupThumbnail thumbnail = new MockupThumbnail();
+                ResourceThumbnail thumbnail = new ResourceThumbnail();
                 thumbnail.Id = row[0];
 
                 if (row[1].Length == 0)
                     row[1] = "{}";
 
                 thumbnail.Attributes = JObject.Parse(row[1]).ToObject<Dictionary<String, JToken>>();
+
+                // Create a hash for thumbnail image, as no value in reading thumbnail data
+                if (createHashes)
+                {
+                    using (MD5 md5 = MD5.Create())
+                    {
+                        byte[] b = ASCIIEncoding.ASCII.GetBytes((String)thumbnail.Attributes["image"]);
+                        b = md5.ComputeHash(b);
+                        thumbnail.Attributes["image-hash"] = BitConverter.ToString(b);
+
+                        // Dont want to show image binary data if showing hashes
+                        thumbnail.Attributes.Remove("image");
+                    }
+
+                }
+
                 project.Thumbnails.Add(thumbnail);
             }
 
 #if (DEBUG)
             // Report unrecognized attributes
             HashSet<String> unknown = new HashSet<string>();
-            foreach (MockupThumbnail thumbnail in project.Thumbnails)
+            foreach (ResourceThumbnail thumbnail in project.Thumbnails)
                 foreach (String u in thumbnail.Attributes.Keys)
                     unknown.Add(u);
 
-            ReportUnknownThings(unknown, typeof(MockupThumbnail).Name);
+            ReportUnknownThings(unknown, typeof(ResourceThumbnail).Name);
 #endif
         }
 

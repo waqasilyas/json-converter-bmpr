@@ -11,7 +11,7 @@ namespace BmprArchiveModel.Model
         public List<SymbolLibrary> SymbolLibraries { get; } = new List<SymbolLibrary>();
         public List<ProjectAsset> Assets { get; } = new List<ProjectAsset>();
         public List<BranchInfo> Branches { get; } = new List<BranchInfo>();
-        public List<MockupThumbnail> Thumbnails { get; } = new List<MockupThumbnail>();
+        public List<ResourceThumbnail> Thumbnails { get; } = new List<ResourceThumbnail>();
         #endregion
     }
 }

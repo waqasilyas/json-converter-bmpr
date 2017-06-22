@@ -55,7 +55,7 @@
     <Compile Include="Model\BmprArchiveReader.cs" />
     <Compile Include="Model\BranchInfo.cs" />
     <Compile Include="Model\Mockup.cs" />
-    <Compile Include="Model\MockupThumbnail.cs" />
+    <Compile Include="Model\ResourceThumbnail.cs" />
     <Compile Include="Model\ProjectAsset.cs" />
     <Compile Include="Model\MockupControl.cs" />
     <Compile Include="Model\Properties\CommonNamedAttributes.cs" />

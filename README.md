@@ -16,12 +16,16 @@ In this regard the main objectives are:
 
 # Usage
 ```
-JsonConverterBmpr.exe [-hf] SOURCE [TARGET]
+Usage:
+    JsonConverterBmpr.exe [-hf] SOURCE [TARGET]
 
-    SOURCE    A *.bmpr file to convert.
-    TARGET    The destination file to save the JSON output. If not give, the JSON is emitted on standard output.
+    SOURCE    A *.bmpr file to convert
+    TARGET    The destination file to save the JSON output. If not give, the
+              JSON is emitted on standard output
     -f        Force overwrite if TARGET exists
-    -h        Prints this description.
+    -nh       Do not replace binary data with hashes. By default a data hash
+              is calculated and emitted for binary data like images
+    -h        Prints this description
 ```
  
 # TODO

@@ -14,9 +14,15 @@ namespace JsonConverterBmpr
 
         static void Main(string[] args)
         {
+            // Parameters 
             String source = null;
             String target = null;
+
+            // Forces overwrite of target if present
             bool forceOverwrite = false;
+
+            // Creates hashes for binary data by default for readability, and at the same time identify differences
+            bool createHashes = true;
 
             try
             {
@@ -33,6 +39,10 @@ namespace JsonConverterBmpr
                         else if (a.Equals("-f"))
                         {
                             forceOverwrite = true;
+                        }
+                        else if (a.Equals("-nh"))
+                        {
+                            createHashes = false;
                         }
                         else
                         {
@@ -66,7 +76,7 @@ namespace JsonConverterBmpr
                 }
 
                 // Load project file
-                MockupProject project = BmprArchiveReader.LoadProject(source);
+                MockupProject project = BmprArchiveReader.LoadProject(source, createHashes);
 
                 // Create a writer
                 TextWriter writer;
@@ -125,10 +135,13 @@ namespace JsonConverterBmpr
             Console.WriteLine(@"Usage: 
     JsonConverterBmpr.exe [-hf] SOURCE [TARGET]
 
-    SOURCE    A *.bmpr file to convert.
-    TARGET    The destination file to save the JSON output. If not give, the JSON is emitted on standard output.
+    SOURCE    A *.bmpr file to convert
+    TARGET    The destination file to save the JSON output. If not give, the
+              JSON is emitted on standard output
     -f        Force overwrite if TARGET exists
-    -h        Prints this description.");
+    -nh       Do not replace binary data with hashes. By default a data hash
+              is calculated and emitted for binary data like images
+    -h        Prints this description");
         }
 
         static void PrintError(string error)

@@ -10,9 +10,7 @@ namespace BmprArchiveModel.Model
         public String BranchId { get; set; }
         public ResourceAttributes Attributes { get; set; }
 
-        [JsonIgnore]
         public String Data { get; set; }
-
         public String DataHash { get; set; }
     }
 }
