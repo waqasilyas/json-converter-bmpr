@@ -15,6 +15,18 @@ namespace BmprArchiveModel.Model
         public String ID { get; set; }
 
         [JsonProperty(Order = 2)]
+        public String Name
+        {
+            get
+            {
+                if (Properties != null)
+                    return Properties.ControlName;
+
+                return null;
+            }
+        }
+
+        [JsonProperty(Order = 3)]
         public String TypeID { get; set; }
 
         [JsonProperty(Order = 10)]

@@ -9,6 +9,7 @@ namespace BmprArchiveModel.Model.Properties
     public class ControlProperties
     {
         // There are too many properties so not adding more here, until there is a need
+        public String ControlName { get; set; }
         public String Text { get; set; }
         public String State { get; set; }
 
