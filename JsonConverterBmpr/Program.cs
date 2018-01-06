@@ -14,6 +14,8 @@ namespace JsonConverterBmpr
 
         static void Main(string[] args)
         {
+            int errorCode = 0;
+
             // Parameters 
             String source = null;
             String target = null;
@@ -40,7 +42,7 @@ namespace JsonConverterBmpr
                         {
                             forceOverwrite = true;
                         }
-                        else if (a.Equals("-nh"))
+                        else if (a.Equals("-n"))
                         {
                             createHashes = false;
                         }
@@ -66,13 +68,15 @@ namespace JsonConverterBmpr
                 if (source == null)
                 {
                     PrintHelp();
-                    Environment.Exit(ErrorBadArguments);
+                    errorCode = ErrorBadArguments;
+                    return;
                 }
 
                 if (!File.Exists(source))
                 {
                     PrintError("Input file '" + source + "' does not exist");
-                    Environment.Exit(ErrorFileDoesntExists);
+                    errorCode = ErrorFileDoesntExists;
+                    return;
                 }
 
                 // Load project file
@@ -121,6 +125,8 @@ namespace JsonConverterBmpr
                 Console.In.Read();
 #endif
             }
+
+            Environment.Exit(errorCode);
         }
 
         static void PrintHeader()
@@ -139,7 +145,7 @@ namespace JsonConverterBmpr
     TARGET    The destination file to save the JSON output. If not give, the
               JSON is emitted on standard output
     -f        Force overwrite if TARGET exists
-    -nh       Do not replace binary data with hashes. By default a data hash
+    -n        Do not replace binary data with hashes. By default a data hash
               is calculated and emitted for binary data like images
     -h        Prints this description");
         }

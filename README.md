@@ -12,7 +12,7 @@ In this regard the main objectives are:
 * Focus exclusively on readability
   * Try to match UI concepts and workflow while structuring the JSON, as compared to representing the underlying RDBMS organization
   * Try to order properties to increase readability, like having ID, name, type kind of properties at the top under an object
-* Friendly to diff tools, don't rely on a lot of command line options
+* Friendly to diff tools, don't rely on a lot of command line options. And don't ask for user inputs
 
 # Usage
 ```
@@ -23,10 +23,11 @@ Usage:
     TARGET    The destination file to save the JSON output. If not give, the
               JSON is emitted on standard output
     -f        Force overwrite if TARGET exists
-    -nh       Do not replace binary data with hashes. By default a data hash
+    -n        Do not replace binary data with hashes. By default a data hash
               is calculated and emitted for binary data like images
     -h        Prints this description
 ```
+Note: Requires .NET Framework 4.5
  
 # TODO
 * Simplify the awkward mockup.controls.control.children.controls.control hierarchy

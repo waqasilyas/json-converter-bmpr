@@ -56,10 +56,8 @@ namespace BmprArchiveModel.Model.Properties
             // Mime type of the resource
             MimeType = (String)attributes[MIME_ATTRIB];
 
-            String path = (String)attributes[IMPORTED_ATTRIB];
-            if (path != null && path.Length > 0)
-                ImportedFrom = new Uri(path);
-
+            ImportedFrom = (String)attributes[IMPORTED_ATTRIB];
+            
             // Remove all known attributes
             attributes.Remove(KIND_ATTRIB);
             attributes.Remove(TRASHED_ATTRIB);
@@ -99,7 +97,7 @@ namespace BmprArchiveModel.Model.Properties
         public String MimeType { get; set; }
 
         [JsonProperty(Order = 13)]
-        public Uri ImportedFrom { get; set; }
+        public String ImportedFrom { get; set; }
 
         #endregion
     }

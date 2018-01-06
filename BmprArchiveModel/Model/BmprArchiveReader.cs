@@ -83,6 +83,12 @@ namespace BmprArchiveModel.Model
                 // Load thumbnails
                 InternalLoadThumbnails(db, project, createHashes);
             }
+            
+            // Sort members so that serialization always produces similar results
+            project.Mockups = project.Mockups.OrderBy(n => n.Attributes.Name).ToList();
+            project.SymbolLibraries = project.SymbolLibraries.OrderBy(n => n.Attributes.Name).ToList();
+            project.Assets = project.Assets.OrderBy(i => i.Attributes.Name).ToList();
+            project.Branches = project.Branches.OrderBy(i => i.Id).ToList();
 
             return project;
         }
@@ -141,8 +147,6 @@ namespace BmprArchiveModel.Model
 
         private static void InternalLoadResources(DatabaseAccess db, MockupProject project, bool createHashes)
         {
-            List<Mockup> mockups = new List<Mockup>();
-
             String[][] data = db.GetTableContent(BarTable.RESOURCES.ToString());
             foreach (String[] row in data)
             {
@@ -194,9 +198,9 @@ namespace BmprArchiveModel.Model
                                 if (control != null)
                                 {
                                     if (attributes.Kind == ResourceKind.Mockup)
-                                        (container as Mockup).Controls = control.ToObject<MockupControl[]>();
+                                        (container as Mockup).Controls = control.ToObject<MockupControl[]>().OrderBy(i => i.ID).ToArray();
                                     else
-                                        (container as SymbolLibrary).Symbols = control.ToObject<MockupSymbol[]>();
+                                        (container as SymbolLibrary).Symbols = control.ToObject<MockupSymbol[]>().OrderBy(i => i.ID).ToArray();
                                 }
                                 else if (!attributes.Trashed)
                                 {
